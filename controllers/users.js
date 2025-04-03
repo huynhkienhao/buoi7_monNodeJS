@@ -7,7 +7,11 @@ module.exports = {
         return await userSchema.find({}).populate('role');
     },
     GetUserById: async (id) => {
-        return await userSchema.findById(id).populate('role');
+        let user = await userSchema.findById(id).populate('role');
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user;
     },
     CreateAnUser: async (username, password, email, role) => {
         let GetRole = await roleController.GetRoleByName(role);
@@ -42,17 +46,17 @@ module.exports = {
             return await user.save();
         }
     },
-    Login: async function (username,password){
+    Login: async function (username, password) {
         let user = await userSchema.findOne({
-            username:username
+            username: username
         })
-        if(!user){
+        if (!user) {
             throw new Error("username hoac mat khau khong dung")
-        }else{
-            console.log(bcrypt.compareSync(password,user.password));
-            if(bcrypt.compareSync(password,user.password)){
+        } else {
+            console.log(bcrypt.compareSync(password, user.password));
+            if (bcrypt.compareSync(password, user.password)) {
                 return user;
-            }else{
+            } else {
                 throw new Error("username hoac mat khau khong dung")
             }
         }

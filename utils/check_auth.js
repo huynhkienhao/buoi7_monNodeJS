@@ -1,6 +1,7 @@
 let jwt = require('jsonwebtoken')
 let constants = require('../utils/constants')
 let userController = require('../controllers/users')
+
 module.exports = {
     check_authentication: async function (req, res, next) {
         if (!req.header || !req.headers.authorization) {
